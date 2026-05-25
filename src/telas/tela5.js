@@ -5,7 +5,6 @@ import { useCalc } from '../shared/CalcContext';
 import {
   AppShell,
   BotaoPrimario,
-  Configuracoes,
   styles as sharedStyles,
   useTema,
 } from '../shared/appShared';
@@ -26,8 +25,6 @@ export default function Tela5({ navigation }) {
             Operação: {operador || '—'}
           </Text>
         </View>
-
-        <Configuracoes />
 
         <View style={[styles.resultadoCard, { backgroundColor: tema.card, borderColor: tema.borda }]}>
           {erro ? (

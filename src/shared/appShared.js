@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
+  Modal,
+  Pressable,
   ScrollView,
   StyleSheet,
   Switch,
@@ -22,22 +24,63 @@ export function useTema() {
 }
 
 export function AppShell({ children }) {
+  const [modalVisivel, setModalVisivel] = useState(false);
   const tema = useTema();
 
   return (
     <View style={[styles.fundo, { backgroundColor: tema.fundo }]}>
       <StatusBar style={tema.statusBar} />
-      <SafeAreaView style={styles.safeArea}>{children}</SafeAreaView>
+      <SafeAreaView style={styles.safeArea}>
+        <TouchableOpacity
+          accessibilityLabel="Abrir configurações"
+          activeOpacity={0.8}
+          onPress={() => setModalVisivel(true)}
+          style={[styles.configBtn, { backgroundColor: tema.card, borderColor: tema.borda }]}
+        >
+          <Text style={[styles.configBtnIcone, { color: tema.destaque }]}>⚙</Text>
+        </TouchableOpacity>
+
+        {children}
+
+        <Modal
+          animationType="fade"
+          transparent
+          visible={modalVisivel}
+          onRequestClose={() => setModalVisivel(false)}
+        >
+          <Pressable style={styles.modalOverlay} onPress={() => setModalVisivel(false)}>
+            <Pressable
+              style={[styles.modalCard, { backgroundColor: tema.card, borderColor: tema.borda }]}
+              onPress={(e) => e.stopPropagation()}
+            >
+              <ConfiguracoesModal onFechar={() => setModalVisivel(false)} />
+            </Pressable>
+          </Pressable>
+        </Modal>
+      </SafeAreaView>
     </View>
   );
 }
 
-export function Configuracoes() {
+function ConfiguracoesModal({ onFechar }) {
   const { temaEscuro, setTemaEscuro, tamanhoFonte, setTamanhoFonte } = useCalc();
   const tema = useTema();
 
   return (
-    <View style={[styles.configCard, { backgroundColor: tema.card, borderColor: tema.borda }]}>
+    <View style={styles.configModalConteudo}>
+      <View style={styles.configModalCabecalho}>
+        <Text style={[styles.configModalTitulo, { color: tema.texto, fontSize: tamanhoFonte * 1.1 }]}>
+          Configurações
+        </Text>
+        <TouchableOpacity
+          accessibilityLabel="Fechar configurações"
+          onPress={onFechar}
+          style={[styles.modalFecharBtn, { borderColor: tema.borda }]}
+        >
+          <Text style={[styles.modalFecharTexto, { color: tema.textoSecundario }]}>✕</Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.configLinha}>
         <View style={styles.configTexto}>
           <Text style={[styles.configTitulo, { color: tema.texto, fontSize: tamanhoFonte * 0.85 }]}>
@@ -71,6 +114,13 @@ export function Configuracoes() {
           thumbTintColor={tema.destaque}
         />
       </View>
+
+      <TouchableOpacity
+        onPress={onFechar}
+        style={[styles.modalOkBtn, { backgroundColor: tema.destaque }]}
+      >
+        <Text style={[styles.modalOkTexto, { fontSize: tamanhoFonte * 0.9 }]}>Fechar</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -217,7 +267,6 @@ export function TelaOperacao({ titulo, operador, simboloCalc, telaAtual, navigat
         keyboardShouldPersistTaps="handled"
       >
         <TelaTitulo titulo={titulo} operador={operador} />
-        <Configuracoes />
         <View style={[styles.formCard, { backgroundColor: tema.card, borderColor: tema.borda }]}>
           <CampoNumero label="Primeiro número" value={numero1} onChangeText={setNumero1} />
           <CampoNumero label="Segundo número" value={numero2} onChangeText={setNumero2} />
@@ -236,19 +285,74 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     gap: 16,
     paddingHorizontal: 20,
-    paddingTop: 12,
+    paddingTop: 52,
     paddingBottom: 32,
+  },
+  configBtn: {
+    alignItems: 'center',
+    borderRadius: 22,
+    borderWidth: 1,
+    height: 44,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 16,
+    top: 4,
+    width: 44,
+    zIndex: 10,
+  },
+  configBtnIcone: {
+    fontSize: 22,
+  },
+  modalOverlay: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(15, 23, 42, 0.55)',
+    flex: 1,
+    justifyContent: 'center',
+    padding: 24,
+  },
+  modalCard: {
+    borderRadius: RAIO.lg,
+    borderWidth: 1,
+    maxWidth: 400,
+    width: '100%',
+  },
+  configModalConteudo: {
+    gap: 20,
+    padding: 20,
+  },
+  configModalCabecalho: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  configModalTitulo: {
+    fontWeight: '800',
+  },
+  modalFecharBtn: {
+    alignItems: 'center',
+    borderRadius: RAIO.sm,
+    borderWidth: 1,
+    height: 32,
+    justifyContent: 'center',
+    width: 32,
+  },
+  modalFecharTexto: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  modalOkBtn: {
+    alignItems: 'center',
+    borderRadius: RAIO.md,
+    paddingVertical: 14,
+  },
+  modalOkTexto: {
+    color: '#fff',
+    fontWeight: '800',
   },
   tituloBloco: { alignItems: 'center', marginBottom: 4 },
   operadorBadge: { fontWeight: '900', marginBottom: 4 },
   titulo: { fontWeight: '800', textAlign: 'center' },
   subtitulo: { fontWeight: '500', marginTop: 4, textAlign: 'center' },
-  configCard: {
-    borderRadius: RAIO.lg,
-    borderWidth: 1,
-    gap: 16,
-    padding: 16,
-  },
   configLinha: {
     alignItems: 'center',
     flexDirection: 'row',
