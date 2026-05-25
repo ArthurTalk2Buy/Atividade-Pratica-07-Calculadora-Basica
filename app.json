@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Atividade Prática 07 - Calculadora Básica",
+    "slug": "atividade-pratica-07-calculadora-basica",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {},
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": ["expo-asset"]
+  }
+}
