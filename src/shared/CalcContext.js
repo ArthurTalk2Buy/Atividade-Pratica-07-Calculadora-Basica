@@ -3,7 +3,7 @@ import React, { createContext, useContext, useMemo, useState } from 'react';
 const CalcContext = createContext(null);
 
 export function CalcProvider({ children }) {
-  const [temaEscuro, setTemaEscuro] = useState(false);
+  const [temaEscuro, setTemaEscuro] = useState(true);
   const [tamanhoFonte, setTamanhoFonte] = useState(18);
   const [numero1, setNumero1] = useState('');
   const [numero2, setNumero2] = useState('');

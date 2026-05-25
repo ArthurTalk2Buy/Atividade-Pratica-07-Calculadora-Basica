@@ -32,12 +32,19 @@ export function AppShell({ children }) {
       <StatusBar style={tema.statusBar} />
       <SafeAreaView style={styles.safeArea}>
         <TouchableOpacity
-          accessibilityLabel="Abrir configurações"
+          accessibilityLabel="Abrir tema e tamanho da fonte"
           activeOpacity={0.8}
           onPress={() => setModalVisivel(true)}
-          style={[styles.configBtn, { backgroundColor: tema.card, borderColor: tema.borda }]}
+          style={[styles.configBtn, { backgroundColor: tema.card, borderColor: tema.destaque }]}
         >
-          <Text style={[styles.configBtnIcone, { color: tema.destaque }]}>⚙</Text>
+          <Text style={styles.configBtnEmoji}>🌙</Text>
+          <View style={styles.configBtnTextos}>
+            <Text style={[styles.configBtnTitulo, { color: tema.texto }]}>Tema e Fonte</Text>
+            <Text style={[styles.configBtnSub, { color: tema.textoSecundario }]}>
+              Switch · Slider
+            </Text>
+          </View>
+          <Text style={styles.configBtnEmoji}>Aa</Text>
         </TouchableOpacity>
 
         {children}
@@ -69,9 +76,14 @@ function ConfiguracoesModal({ onFechar }) {
   return (
     <View style={styles.configModalConteudo}>
       <View style={styles.configModalCabecalho}>
-        <Text style={[styles.configModalTitulo, { color: tema.texto, fontSize: tamanhoFonte * 1.1 }]}>
-          Configurações
-        </Text>
+        <View style={styles.configModalTituloBloco}>
+          <Text style={[styles.configModalTitulo, { color: tema.texto, fontSize: tamanhoFonte * 1.1 }]}>
+            Tema e Fonte
+          </Text>
+          <Text style={[styles.configModalSub, { color: tema.textoSecundario, fontSize: tamanhoFonte * 0.75 }]}>
+            Use o Switch para o tema e o Slider para a fonte
+          </Text>
+        </View>
         <TouchableOpacity
           accessibilityLabel="Fechar configurações"
           onPress={onFechar}
@@ -285,23 +297,45 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     gap: 16,
     paddingHorizontal: 20,
-    paddingTop: 52,
+    paddingTop: 58,
     paddingBottom: 32,
   },
   configBtn: {
     alignItems: 'center',
-    borderRadius: 22,
-    borderWidth: 1,
-    height: 44,
-    justifyContent: 'center',
+    borderRadius: RAIO.md,
+    borderWidth: 1.5,
+    flexDirection: 'row',
+    gap: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
     position: 'absolute',
-    right: 16,
+    right: 12,
     top: 4,
-    width: 44,
     zIndex: 10,
   },
-  configBtnIcone: {
-    fontSize: 22,
+  configBtnEmoji: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  configBtnTextos: {
+    alignItems: 'center',
+  },
+  configBtnTitulo: {
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  configBtnSub: {
+    fontSize: 10,
+    fontWeight: '600',
+    marginTop: 1,
+  },
+  configModalTituloBloco: {
+    flex: 1,
+    gap: 2,
+    marginRight: 8,
+  },
+  configModalSub: {
+    fontWeight: '500',
   },
   modalOverlay: {
     alignItems: 'center',
